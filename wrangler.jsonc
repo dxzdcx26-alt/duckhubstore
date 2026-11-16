@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "digitalhub-store",
+  "compatibility_date": "2026-08-28",
+  "pages_build_output_dir": "./dist",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "digitalhub-store-db",
+      "database_id": "640243e0-275b-4cc1-abfb-5da55bb905eb",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
