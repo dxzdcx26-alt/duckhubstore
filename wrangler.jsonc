@@ -7,7 +7,7 @@
     {
       "binding": "DB",
       "database_name": "digitalhub-store-db",
-      "database_id": "640243e0-275b-4cc1-abfb-5da55bb905eb",
+      "database_id": "a612c21e-0b41-4efb-80a9-441b251d5edd",
       "migrations_dir": "migrations"
     }
   ]
