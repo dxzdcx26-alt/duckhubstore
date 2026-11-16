@@ -85,6 +85,8 @@ jobs:
           command: d1 execute ${{ env.D1_NAME }} --remote --file=./migrations/0001_digitalhub.sql
 
       - name: Apply D1 migration 0002
+        # password_hash ถูกเพิ่มแล้วใน deploy ครั้งก่อน — D1/SQLite ไม่มี ADD COLUMN IF NOT EXISTS
+        continue-on-error: true
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
