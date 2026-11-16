@@ -1,8 +1,7 @@
-export type ProductCategory =
+export type ProductCategory = 
   | 'all'
   | 'streaming'
   | 'gaming'
-  | 'otp'
   | 'ai'
   | 'music'
   | 'creator'
@@ -122,39 +121,37 @@ export interface VoucherCode {
   isActive: boolean;
 }
 
-export interface OTPServiceItem {
-  id: string;
-  name: string;
-  icon: string;
-  price: number;
-  availableCount: number;
-  popularCountries: { code: string; name: string; flag: string; cost: number }[];
-}
-
-export interface ActiveOTPOrder {
-  id: string;
-  serviceId: string;
-  serviceName: string;
-  countryCode: string;
-  countryName: string;
-  phoneNumber: string;
-  price: number;
-  status: 'waiting' | 'received' | 'timeout' | 'cancelled';
-  smsCode?: string;
-  fullMessage?: string;
-  expiresAt: number;
-  createdAt: number;
-}
-
 export interface DailyRewardRecord {
   day: number;
-  claimed: boolean;
-  rewardType?: string;
-  value?: number;
+  claimedAt: number;
+  rewardType: 'balance' | 'points' | 'spin' | 'combo';
+  amountText: string;
+  balanceBonus: number;
+  pointsBonus: number;
+  spinBonus: number;
 }
 
-export interface Toast {
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: 'user' | 'admin';
+  balance: number;
+  points: number;
+  totalSpent: number;
+  spinCount: number;
+  createdAt: string;
+  photoURL?: string;
+  isGuest?: boolean;
+  lastDailyClaim?: number;
+  dailyStreak?: number;
+  dailyRewardHistory?: DailyRewardRecord[];
+}
+
+export interface ToastMessage {
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
+  title: string;
   message: string;
+  duration?: number;
 }
