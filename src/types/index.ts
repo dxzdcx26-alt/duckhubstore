@@ -2,7 +2,6 @@ export type ProductCategory =
   | 'all'
   | 'streaming'
   | 'gaming'
-  | 'otp'
   | 'ai'
   | 'music'
   | 'creator'
@@ -12,12 +11,12 @@ export type ProductCategory =
 export interface ProductPlan {
   id: string;
   name: string;
-  duration: string; // e.g. "30 วัน", "1 ปี", "ถาวร"
+  duration: string;
   price: number;
   originalPrice?: number;
   stockCount: number;
   badge?: string;
-  credentials?: string[]; // stock pool (e.g. "user:pass", "key-code")
+  credentials?: string[];
 }
 
 export interface Product {
@@ -30,8 +29,8 @@ export interface Product {
   features: string[];
   bannerUrl?: string;
   logoText: string;
-  logoColor: string; // e.g. "#eab308"
-  logoBg: string; // e.g. "#111"
+  logoColor: string;
+  logoBg: string;
   logoIconName?: string;
   minPrice: number;
   plans: ProductPlan[];
@@ -92,12 +91,12 @@ export interface WheelItem {
   id: string;
   name: string;
   type: WheelPrizeType;
-  value: number; // e.g. 50 (baht), 1 (spin), 100 (coupon)
+  value: number;
   itemRewardName?: string;
   itemRewardKey?: string;
   color: string;
   textColor: string;
-  weight: number; // probability weight
+  weight: number;
   icon: string;
 }
 
@@ -114,36 +113,12 @@ export interface VoucherCode {
   id: string;
   code: string;
   rewardType: 'balance' | 'discount' | 'spin' | 'item';
-  value: number; // amount of balance, percentage, or spin count
+  value: number;
   minOrderAmount?: number;
   usedCount: number;
   maxUses: number;
   expiresAt?: string;
   isActive: boolean;
-}
-
-export interface OTPServiceItem {
-  id: string;
-  name: string;
-  icon: string;
-  price: number;
-  availableCount: number;
-  popularCountries: { code: string; name: string; flag: string; cost: number }[];
-}
-
-export interface ActiveOTPOrder {
-  id: string;
-  serviceId: string;
-  serviceName: string;
-  countryCode: string;
-  countryName: string;
-  phoneNumber: string;
-  price: number;
-  status: 'waiting' | 'received' | 'timeout' | 'cancelled';
-  smsCode?: string;
-  fullMessage?: string;
-  expiresAt: number; // timestamp
-  createdAt: number;
 }
 
 export interface DailyRewardRecord {
@@ -168,8 +143,8 @@ export interface User {
   createdAt: string;
   photoURL?: string;
   isGuest?: boolean;
-  lastDailyClaim?: number; // timestamp in ms
-  dailyStreak?: number;    // current streak (1-7)
+  lastDailyClaim?: number;
+  dailyStreak?: number;
   dailyRewardHistory?: DailyRewardRecord[];
 }
 
