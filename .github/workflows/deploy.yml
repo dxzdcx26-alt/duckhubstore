@@ -42,12 +42,11 @@ jobs:
             npm install
           fi
 
+      - name: Typecheck
+        run: npx tsc --noEmit
+        continue-on-error: false
+
       - name: Build (Vite)
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          VITE_GAFIW_API_KEY: ${{ secrets.VITE_GAFIW_API_KEY }}
         run: npm run build
 
       - name: Verify dist output
@@ -55,10 +54,6 @@ jobs:
           test -d dist || (echo "dist/ missing after build" && exit 1)
           echo "dist contents:"
           ls -la dist | head -30
-          if [ -d functions ]; then
-            echo "functions/ present"
-            ls functions/api 2>/dev/null || true
-          fi
 
       - name: Check Cloudflare secrets
         env:
@@ -75,20 +70,19 @@ jobs:
           fi
           echo "Cloudflare secrets are set."
 
-      - name: Deploy with Wrangler
+      - name: Deploy Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=${{ env.PROJECT_NAME }} --commit-dirty=true
 
-      - name: Apply D1 migrations
+      - name: Apply D1 migrations (0001)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: d1 execute ${{ env.D1_NAME }} --remote --file=./migrations/0001_digitalhub.sql
-        continue-on-error: true
 
       - name: Apply D1 migration 0002
         uses: cloudflare/wrangler-action@v3
@@ -96,7 +90,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: d1 execute ${{ env.D1_NAME }} --remote --file=./migrations/0002_auth_d1.sql
-        continue-on-error: true
 
       - name: Apply D1 migration 0003
         uses: cloudflare/wrangler-action@v3
@@ -104,7 +97,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: d1 execute ${{ env.D1_NAME }} --remote --file=./migrations/0003_ahteeshop_parity.sql
-        continue-on-error: true
 
       - name: Deployment summary
         run: |
