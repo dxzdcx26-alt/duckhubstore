@@ -1,8 +1,0 @@
-type D1User = { id:string; username:string; email:string|null; role:string; balance:number; points:number; total_spent:number; spin_count:number; created_at:string; photo_url?:string|null; last_daily_claim?:number|null; daily_streak?:number };
-const api=async(path:string,body?:unknown)=>{const r=await fetch(path,{method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined,cache:'no-store'});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(String(d?.message||`Request failed (${r.status})`));return d;};
-export const supabase={auth:{onAuthStateChange:(_cb:(event:string,session:null)=>void)=>({data:{subscription:{unsubscribe:()=>{}}}})}};
-export async function signUp(username:string,emailOrPassword:string,maybePassword?:string){const email=maybePassword===undefined?'':emailOrPassword.trim();const password=maybePassword===undefined?emailOrPassword:maybePassword;const data=await api('/api/auth/register',{username,email,password});localStorage.setItem('dh_uid',String(data.user.id));return {user:data.user,token:data.token||''};}
-export async function signIn(usernameOrEmail:string,password:string){const data=await api('/api/auth/session',{username:usernameOrEmail,password});localStorage.setItem('dh_session',String(data.token));localStorage.setItem('dh_uid',String(data.user.id));return data;}
-export async function signOut(){localStorage.removeItem('dh_session');localStorage.removeItem('dh_uid');}
-export async function getUserProfile(userId:string){const data=await api(`/api/user?id=${encodeURIComponent(userId)}`);return data.user as D1User;}
-export async function upsertUserProfile(profile:any){return api('/api/user',{...profile});}
