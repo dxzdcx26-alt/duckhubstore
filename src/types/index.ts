@@ -1,4 +1,4 @@
-export type ProductCategory =
+export type ProductCategory = 
   | 'all'
   | 'streaming'
   | 'gaming'
@@ -12,12 +12,12 @@ export type ProductCategory =
 export interface ProductPlan {
   id: string;
   name: string;
-  duration: string;
+  duration: string; // e.g. "30 วัน", "1 ปี", "ถาวร"
   price: number;
   originalPrice?: number;
   stockCount: number;
   badge?: string;
-  credentials?: string[];
+  credentials?: string[]; // stock pool (e.g. "user:pass", "key-code")
 }
 
 export interface Product {
@@ -30,8 +30,8 @@ export interface Product {
   features: string[];
   bannerUrl?: string;
   logoText: string;
-  logoColor: string;
-  logoBg: string;
+  logoColor: string; // e.g. "#eab308"
+  logoBg: string; // e.g. "#111"
   logoIconName?: string;
   minPrice: number;
   plans: ProductPlan[];
@@ -92,12 +92,12 @@ export interface WheelItem {
   id: string;
   name: string;
   type: WheelPrizeType;
-  value: number;
+  value: number; // e.g. 50 (baht), 1 (spin), 100 (coupon)
   itemRewardName?: string;
   itemRewardKey?: string;
   color: string;
   textColor: string;
-  weight: number;
+  weight: number; // probability weight
   icon: string;
 }
 
@@ -114,7 +114,7 @@ export interface VoucherCode {
   id: string;
   code: string;
   rewardType: 'balance' | 'discount' | 'spin' | 'item';
-  value: number;
+  value: number; // amount of balance, percentage, or spin count
   minOrderAmount?: number;
   usedCount: number;
   maxUses: number;
@@ -142,19 +142,41 @@ export interface ActiveOTPOrder {
   status: 'waiting' | 'received' | 'timeout' | 'cancelled';
   smsCode?: string;
   fullMessage?: string;
-  expiresAt: number;
+  expiresAt: number; // timestamp
   createdAt: number;
 }
 
 export interface DailyRewardRecord {
   day: number;
-  claimed: boolean;
-  rewardType?: string;
-  value?: number;
+  claimedAt: number;
+  rewardType: 'balance' | 'points' | 'spin' | 'combo';
+  amountText: string;
+  balanceBonus: number;
+  pointsBonus: number;
+  spinBonus: number;
 }
 
-export interface Toast {
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: 'user' | 'admin';
+  balance: number;
+  points: number;
+  totalSpent: number;
+  spinCount: number;
+  createdAt: string;
+  photoURL?: string;
+  isGuest?: boolean;
+  lastDailyClaim?: number; // timestamp in ms
+  dailyStreak?: number;    // current streak (1-7)
+  dailyRewardHistory?: DailyRewardRecord[];
+}
+
+export interface ToastMessage {
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
+  title: string;
   message: string;
+  duration?: number;
 }
